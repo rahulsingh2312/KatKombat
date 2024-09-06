@@ -125,9 +125,23 @@ const Home: React.FC<HomeProps & { setActiveComponent: React.Dispatch<React.SetS
       </div>
 
       <div className="flex flex-row items-center justify-center mt-14 pb-10 gap-4">
-        <button className="w-[100px] h-[43px] bg-black text-white font-semibold text-xs rounded-md font-mono box-border flex justify-center items-center px-3 py-4 gap-3 bg-opacity-85 border border-white shadow-[1px_2px_0px_rgba(0,0,0,0.8)]">
-          <img src='/Share.webp' className="invert" alt='share' /> Share
-        </button>
+      <button
+  className="w-[100px] h-[43px] bg-black text-white font-semibold text-xs rounded-md font-mono box-border flex justify-center items-center px-3 py-4 gap-3 bg-opacity-85 border border-white shadow-[1px_2px_0px_rgba(0,0,0,0.8)]"
+  onClick={() => {
+    // Copy the URL to clipboard
+    navigator.clipboard.writeText('t.me/katKoombatbot/katkombat')
+      .then(() => {
+        // Show alert when successfully copied
+        alert('Copied: t.me/katKoombatbot/katkombat');
+      })
+      .catch((err) => {
+        console.error('Failed to copy: ', err);
+      });
+  }}
+>
+  <img src='/Share.webp' className="invert" alt='share' /> Share
+</button>
+
         <button 
                   onClick={() => setActiveComponent('leaderboard')}
         className="box-border flex justify-center items-center px-3 font-mono py-4 gap-2 border border-black shadow-[1px_2px_0px_rgba(0,0,0,0.8)] rounded-lg flex-none order-1 w-[125px] h-[43px] bg-white text-black font-semibold text-xs">
