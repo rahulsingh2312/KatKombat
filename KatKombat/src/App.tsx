@@ -46,7 +46,7 @@ const Home: React.FC<HomeProps & { setActiveComponent: React.Dispatch<React.SetS
       if (error) {
         if (error.code === 'PGRST116') {
           console.log('No user entry found, creating a new one');
-          const { data: newUser, error: insertError } = await supabase
+          const {  error: insertError } = await supabase
             .from('users')
             .insert({ id: session.user.id, cats: 0, username: session.user.email })
             .select()
