@@ -124,7 +124,7 @@ const Home: React.FC<HomeProps & { setActiveComponent: React.Dispatch<React.SetS
         </div>
       </div>
 
-      <div className="flex flex-row items-center justify-center mt-14 pb-10 gap-4">
+      <div className="flex flex-row items-center justify-center mt-14 mb-60 gap-4">
       <button
   className="w-[100px] h-[43px] bg-black text-white font-semibold text-xs rounded-md font-mono box-border flex justify-center items-center px-3 py-4 gap-3 bg-opacity-85 border border-white shadow-[1px_2px_0px_rgba(0,0,0,0.8)]"
   onClick={() => {
@@ -193,7 +193,7 @@ const Leaderboard: React.FC = () => {
 
   return (
     <div className=" min-h-screen p-6">
-      <h1 className='bg-gradient-to-r flex justify-center text-center text-xl font-serif from-[#4343FF] via-[#EC55FF] to-[#FFD939] py-10 text-transparent bg-clip-text'>🏆 Kat Kombat Leaderboard 🏆</h1>
+      <h1 className='bg-gradient-to-r flex justify-center text-center text-xl font-serif from-[#4343FF] via-[#EC55FF] to-[#FFD939] py-10 text-transparent bg-clip-text'>KatKombat Leaderboard 🏆</h1>
       {loading ? (
         <p className="text-center text-white">Loading leaderboard...</p>
       ) : (
@@ -210,7 +210,9 @@ const Leaderboard: React.FC = () => {
               {leaderboardData.map((user, index) => (
                 <tr key={index} className={index % 2 === 0 ? 'bg-pink-50' : 'bg-white'}>
                   <td className="py-3 px-4 font-medium">{index + 1}</td>
-                  <td className="py-3 px-4">{user.username || 'Anonymous Cat Lover'}</td>
+                  <td className="py-3 px-4">
+                  {user.username ? (user.username.length > 5 ? user.username.slice(0, 5) + '...' : user.username) : 'Anonymous Cat Lover'}
+                    </td>
                   <td className="py-3 px-4 text-right font-bold">
                     {user.cats} 😺
                   </td>
@@ -263,7 +265,7 @@ const Auth: React.FC<AuthProps> = ({ setSession }) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center ">
-      <div className="bg-white p-8 rounded-lg shadow-2xl w-96 transform transition-all hover:scale-105">
+      <div className=" p-8 rounded-lg shadow-2xl w-96 transform transition-all hover:scale-105">
         <div className="text-center mb-8">
           <FaCat className="text-6xl mx-auto text-pink-500 mb-2" />
           <h2 className="text-3xl font-bold text-gray-800">Kat Kombat</h2>
