@@ -29,7 +29,7 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
       const { data, error } = await supabase
         .from('users')
         .select('cats')
-        .eq('id', userId)
+        .eq('telegram_id', userId)
         .single();
 
       if (error) {
@@ -37,7 +37,7 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
           console.log('No user entry found, creating a new one');
           const { error: insertError } = await supabase
             .from('users')
-            .insert({ id: userId, cats: 0, username: userData?.username })
+            .insert({telegram_id : userId, cats: 0, username: userData?.username })
             .select()
             .single();
 
