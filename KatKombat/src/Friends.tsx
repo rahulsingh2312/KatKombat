@@ -1,59 +1,64 @@
+// Friends.tsx
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import { FaUserPlus, FaLink, FaUsers } from 'react-icons/fa';
-import { Session } from '@supabase/supabase-js';
+import { UserData } from './App';
 
-type Referral = {
+interface Referral {
   id: string;
   referred_email: string;
   cats: number;
-};
+}
 
-type FriendsProps = {
-    session: Session | null;
-};
+interface FriendsProps {
+  userData: UserData | null;
+}
 
-const Friends: React.FC<FriendsProps> = ({ session }) => {
+const Friends: React.FC<FriendsProps> = ({ userData }) => {
   const [referralLink, setReferralLink] = useState<string>('');
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [totalBonus, setTotalBonus] = useState<number>(0);
 
   useEffect(() => {
-    if (session && session.user) {
-      const link = `https://t.me/katKoombatbot/katkombat?ref=${session.user.id}`;
+    if (userData) {
+      const link = `https://t.me/katKoombatbot/katkombat?ref=${userData.id}`;
       setReferralLink(link);
       fetchReferrals();
     }
-  }, [session]);
+  }, [userData]);
 
   const fetchReferrals = async () => {
-    if (!session || !session.user) return;
+    if (!userData) return;
 
-    const { data, error } = await supabase
-      .from('referrals')
-      .select(`
-        id,
-        referred_email,
-        referred_user_id,
-        users:referred_user_id(cats)
-      `)
-      .eq('referrer_id', session.user.id);
+    try {
+      const { data, error } = await supabase
+        .from('referrals')
+        .select(`
+          id,
+          referred_email,
+          referred_user_id,
+          users:referred_user_id(cats)
+        `)
+        .eq('referrer_id', userData.id);
 
-    if (error) {
-      console.error('Error fetching referrals:', error);
-      return;
+      if (error) {
+        console.error('Error fetching referrals:', error);
+        return;
+      }
+
+      const referralsData = data.map(item => ({
+        id: item.id,
+        referred_email: item.referred_email,
+        cats: (item.users as any)?.cats || 0,
+      }));
+
+      setReferrals(referralsData);
+
+      const bonus = referralsData.length * 500;
+      setTotalBonus(bonus);
+    } catch (error) {
+      console.error('Error in fetchReferrals:', error);
     }
-
-    const referralsData = data.map(item => ({
-      id: item.id,
-      referred_email: item.referred_email,
-      cats: (item.users as unknown as { cats: any }).cats || 0,
-    }));
-
-    setReferrals(referralsData);
-
-    const bonus = referralsData.length * 500;
-    setTotalBonus(bonus);
   };
 
   const copyReferralLink = () => {
