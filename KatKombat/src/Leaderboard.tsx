@@ -15,7 +15,6 @@ const Leaderboard: React.FC = () => {
         .from('users')
         .select('username, cats')
         .order('cats', { ascending: false })
-        .limit(50);
 
       if (error) throw error;
 
