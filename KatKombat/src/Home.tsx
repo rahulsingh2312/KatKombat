@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import { UserData } from './App';
+import WebApp from '@twa-dev/sdk';
 
 interface HomeProps {
   userData: UserData | null;
@@ -21,6 +22,7 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
   useEffect(() => {
     if (userData) {
       fetchCatCount(userData.id);
+      checkReferral();
     }
   }, [userData]);
 
@@ -29,7 +31,7 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
       const { data, error } = await supabase
         .from('users')
         .select('cats')
-        .eq('telegram_id', userId)
+        .eq('id', userId)
         .single();
 
       if (error) {
@@ -37,7 +39,7 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
           console.log('No user entry found, creating a new one');
           const { error: insertError } = await supabase
             .from('users')
-            .insert({telegram_id : userId, cats: 0, username: userData?.username })
+            .insert({ id: userId, cats: 0, username: userData?.username })
             .select()
             .single();
 
@@ -55,6 +57,46 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
       }
     } catch (error) {
       console.error('Error in fetchCatCount:', error);
+    }
+  };
+
+  const checkReferral = async () => {
+    const startParam = WebApp.initDataUnsafe.start_param;
+    if (startParam && startParam.startsWith('ref_')) {
+      const referrerId = startParam.split('_')[1];
+      
+      // Check if this user has already been processed for referral
+      const { data: existingReferral } = await supabase
+        .from('referrals')
+        .select('id')
+        .eq('referred_user_id', userData?.id)
+        .single();
+
+      if (!existingReferral) {
+        // Add referral record
+        await supabase
+          .from('referrals')
+          .insert({
+            referrer_id: referrerId,
+            referred_user_id: userData?.id,
+            referred_email: userData?.username || ''
+          });
+
+        // Award 500 cats to the referrer
+        const { data: referrerData, error: referrerError } = await supabase
+          .from('users')
+          .select('cats')
+          .eq('id', referrerId)
+          .single();
+
+        if (referrerData && !referrerError) {
+          const newCats = referrerData.cats + 500;
+          await supabase
+            .from('users')
+            .update({ cats: newCats })
+            .eq('id', referrerId);
+        }
+      }
     }
   };
 
@@ -77,7 +119,7 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
       const { error } = await supabase
         .from('users')
         .update({ cats: newCount, username: userData.username })
-        .eq('telegram_id', userData.id);
+        .eq('id', userData.id);
 
       if (error) {
         console.error('Error updating cat count:', error);

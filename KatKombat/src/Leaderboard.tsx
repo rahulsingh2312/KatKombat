@@ -28,7 +28,7 @@ const Leaderboard: React.FC = () => {
   };
 
   return (
-    <div className=" min-h-screen p-6">
+    <div className=" min-h-screen p-6 mb-20">
       <h1 className='bg-gradient-to-r flex justify-center text-center text-xl font-serif from-[#4343FF] via-[#EC55FF] to-[#FFD939] py-10 text-transparent bg-clip-text'>KatKombat Leaderboard 🏆</h1>
       {loading ? (
         <p className="text-center text-white">Loading leaderboard...</p>
@@ -47,7 +47,7 @@ const Leaderboard: React.FC = () => {
                 <tr key={index} className={index % 2 === 0 ? 'bg-pink-50' : 'bg-white'}>
                   <td className="py-3 px-4 font-medium">{index + 1}</td>
                   <td className="py-3 px-4">
-                  {user.username ? (user.username.length > 5 ? user.username.slice(0, 5) + '...' : user.username) : 'Anonymous Cat Lover'}
+                  {user.username ? (user.username.length > 5 ? user.username.slice(0, 10) + '...' : user.username) : 'Anon. Cat Lover'}
                     </td>
                   <td className="py-3 px-4 text-right font-bold">
                     {user.cats} 😺
