@@ -1,4 +1,3 @@
-// Friends.tsx
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import { FaUserPlus, FaLink, FaUsers } from 'react-icons/fa';
@@ -6,7 +5,7 @@ import { UserData } from './App';
 
 interface Referral {
   id: string;
-  referred_email: string;
+  referred_username: string;
   cats: number;
 }
 
@@ -21,7 +20,7 @@ const Friends: React.FC<FriendsProps> = ({ userData }) => {
 
   useEffect(() => {
     if (userData) {
-      const link = `https://t.me/katKoombatbot/katkombat?ref=${userData.id}`;
+      const link = `https://t.me/katKoombatbot/katkombat?startapp=ref_${userData.id}`;
       setReferralLink(link);
       fetchReferrals();
     }
@@ -35,11 +34,11 @@ const Friends: React.FC<FriendsProps> = ({ userData }) => {
         .from('referrals')
         .select(`
           id,
-          referred_email,
-          referred_user_id,
-          users:referred_user_id(cats)
+          referred_username,
+          referred_telegram_id,
+          users:referred_telegram_id(cats)
         `)
-        .eq('referrer_id', userData.id);
+        .eq('referrer_telegram_id', userData.id);
 
       if (error) {
         console.error('Error fetching referrals:', error);
@@ -48,7 +47,7 @@ const Friends: React.FC<FriendsProps> = ({ userData }) => {
 
       const referralsData = data.map(item => ({
         id: item.id,
-        referred_email: item.referred_email,
+        referred_username: item.referred_username,
         cats: (item.users as any)?.cats || 0,
       }));
 
@@ -111,7 +110,7 @@ const Friends: React.FC<FriendsProps> = ({ userData }) => {
             <table className="min-w-full bg-white">
               <thead>
                 <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                  <th className="py-3 px-6 text-left">Email</th>
+                  <th className="py-3 px-6 text-left">Username</th>
                   <th className="py-3 px-6 text-center">Cats</th>
                 </tr>
               </thead>
@@ -119,7 +118,7 @@ const Friends: React.FC<FriendsProps> = ({ userData }) => {
                 {referrals.map(referral => (
                   <tr key={referral.id} className="border-b border-gray-200 hover:bg-gray-100">
                     <td className="py-3 px-6 text-left whitespace-nowrap">
-                      {referral.referred_email}
+                      {referral.referred_username}
                     </td>
                     <td className="py-3 px-6 text-center">
                       {referral.cats} 😺

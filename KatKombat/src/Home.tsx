@@ -63,13 +63,13 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
   const checkReferral = async () => {
     const startParam = WebApp.initDataUnsafe.start_param;
     if (startParam && startParam.startsWith('ref_')) {
-      const referrerId = startParam.split('_')[1];
+      const referrerTelegramId = startParam.split('_')[1];
       
       // Check if this user has already been processed for referral
       const { data: existingReferral } = await supabase
         .from('referrals')
         .select('id')
-        .eq('referred_user_id', userData?.id)
+        .eq('referred_telegram_id', userData?.id)
         .single();
 
       if (!existingReferral) {
@@ -77,16 +77,16 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
         await supabase
           .from('referrals')
           .insert({
-            referrer_id: referrerId,
-            referred_user_id: userData?.id,
-            referred_email: userData?.username || ''
+            referrer_telegram_id: referrerTelegramId,
+            referred_telegram_id: userData?.id,
+            referred_username: userData?.username || ''
           });
 
         // Award 500 cats to the referrer
         const { data: referrerData, error: referrerError } = await supabase
           .from('users')
           .select('cats')
-          .eq('id', referrerId)
+          .eq('telegram_id', referrerTelegramId)
           .single();
 
         if (referrerData && !referrerError) {
@@ -94,7 +94,7 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
           await supabase
             .from('users')
             .update({ cats: newCats })
-            .eq('id', referrerId);
+            .eq('telegram_id', referrerTelegramId);
         }
       }
     }
