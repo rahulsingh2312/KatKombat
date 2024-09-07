@@ -79,7 +79,7 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
           .insert({
             referrer_telegram_id: referrerTelegramId,
             referred_telegram_id: userData?.id,
-            referred_username: userData?.username || ''
+            referred_username: userData?.first_name || userData?.username ||  userData?.last_name
           });
 
         // Award 500 cats to the referrer
@@ -118,7 +118,7 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
     try {
       const { error } = await supabase
         .from('users')
-        .update({ cats: newCount, username: userData.username })
+        .update({ cats: newCount, username: userData.username || userData?.first_name ||  userData?.last_name  })
         .eq('telegram_id', userData.id);
 
       if (error) {
