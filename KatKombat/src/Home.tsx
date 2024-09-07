@@ -77,7 +77,7 @@ const Home: React.FC<HomeProps> = ({ userData, setActiveComponent }) => {
       const { error } = await supabase
         .from('users')
         .update({ cats: newCount, username: userData.username })
-        .eq('id', userData.id);
+        .eq('telegram_id', userData.id);
 
       if (error) {
         console.error('Error updating cat count:', error);
