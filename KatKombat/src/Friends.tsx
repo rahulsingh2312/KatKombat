@@ -118,7 +118,7 @@ const Friends: React.FC<FriendsProps> = ({ userData }) => {
                 {referrals.map(referral => (
                   <tr key={referral.id} className="border-b border-gray-200 hover:bg-gray-100">
                     <td className="py-3 px-6 text-left whitespace-nowrap">
-                      {referral.referred_username}
+                      {referral.referred_username || "anon. cat lover"}
                     </td>
                     <td className="py-3 px-6 text-center">
                       {referral.cats} 😺
