@@ -1,7 +1,7 @@
 {
-  "name": "Kat",
-  "symbol": "KAT",
-  "description": "Kat token on Solana mainnet",
+  "name": "Kats",
+  "symbol": "KATS",
+  "description": "Kats from Kat Kombat",
   "image": "https://raw.githubusercontent.com/rahulsingh2312/KatKombat/main/Angelcat.webp",
   "attributes": [
       {
