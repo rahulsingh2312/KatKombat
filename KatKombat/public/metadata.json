@@ -2,5 +2,11 @@
   "name": "Kat",
   "symbol": "KAT",
   "description": "Kat token on Solana mainnet",
-  "image": "/angelcat.jpg"
+  "image": "https://raw.githubusercontent.com/rahulsingh2312/KatKombat/main/Angelcat.webp",
+  "attributes": [
+      {
+        "trait_type": "Item",
+        "value": "Compressed Coil"
+      }
+    ]
 }
