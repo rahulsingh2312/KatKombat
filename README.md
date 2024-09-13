@@ -11,7 +11,7 @@
 
  Token address on solana : 
 
- ##### https://solana.fm/address/minZtfJzcHW2A5iKLcSV82Pebt4jyX73gNEhfHYUHCg?cluster=devnet-solana
+ ##### https://solana.fm/address/KATio4gj6sJksS2EN3RZSXxzBm8v93eewme6ixhGf8d?cluster=mainnet-alpha
 
 
 Welcome to **Kat Kombat**! 🌟  
